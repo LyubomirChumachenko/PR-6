@@ -19,6 +19,10 @@ public class ConsoleApp implements CommandLineRunner {
     public void run(String... args) {
         while (true) {
             System.out.println("\n1. Добавить парфюм\n2. Показать все позиции\n3. Редактировать по ID\n4. Удалить по ID\n5. Искать по типу\n6. Выход");
+            System.out.println("http://localhost:8081/index.html");
+            System.out.println("Данные для входа в аккаунт Администратора:");
+            System.out.println("Логин: admin");
+            System.out.println("Пароль: 0890");
             
             // Безопасное чтение ввода с проверкой
             String input = scanner.nextLine().trim();

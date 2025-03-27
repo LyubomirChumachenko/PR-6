@@ -5,9 +5,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 @SpringBootApplication
-@EntityScan("ru.example")  // укажите пакет, где находятся ваши сущности
+@EntityScan("ru.example")
 public class ParfumeAppApplication {
+
     public static void main(String[] args) {
         SpringApplication.run(ParfumeAppApplication.class, args);
     }
+
 }

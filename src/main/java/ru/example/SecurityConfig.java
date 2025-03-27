@@ -30,25 +30,33 @@ public class SecurityConfig {
     }
 
     @Bean
-        public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-            http
-                .authorizeHttpRequests((authorize) -> authorize
-                    .antMatchers("/login*", "/register*").permitAll()
-                    .anyRequest().authenticated()
-                )
-                .logout((logout) -> logout
-                    .logoutUrl("/logout")
-                    .logoutSuccessUrl("/login?logout")
-                    .invalidateHttpSession(true)
-                    .deleteCookies("JSESSIONID")
-                )
-                .formLogin((formLogin) -> formLogin
-                    .loginPage("/login")
-                    .permitAll()
-                )
-                .csrf((csrf) -> csrf.disable())
-                .userDetailsService(customUserDetailsService);
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+            .authorizeHttpRequests((authorize) -> authorize
+                // Для старых версий Spring Security (5.x)
+                .antMatchers("/login*", "/register*").permitAll()
+                // Добавляем правила для администраторских URL
+                .antMatchers("/parfume/new", "/parfume/search").hasRole("ADMIN")
+                // URL доступные всем авторизованным пользователям
+                .antMatchers("/parfume").authenticated()
+                .anyRequest().authenticated()
+                
 
-            return http.build();
-        }
+            )
+            .logout((logout) -> logout
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login?logout")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+            )
+            .formLogin((formLogin) -> formLogin
+                .loginPage("/login")
+                .defaultSuccessUrl("/", true) // Перенаправление на главную страницу после успешного входа
+                .permitAll()
+            )
+            .csrf((csrf) -> csrf.disable())
+            .userDetailsService(customUserDetailsService);
+
+        return http.build();
+    }
 }

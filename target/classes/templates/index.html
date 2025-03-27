@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="ru" >
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,10 +7,12 @@
 </head>
 <body>
 <h1>Магазин парфюмерии</h1>
+<h1 sec:authorize="hasRole('ADMIN')">Ваша роль: Администратор</h1>
+<h1 sec:authorize="hasRole('USER')">Ваша роль: Обычный пользователь</h1>
     <ul>
-        <li sec:authorize="hasRole('ROLE_ADMIN')"> <a href="/parfume/new">1. Добавить парфюм</a></li>
+        <li sec:authorize="hasRole('ADMIN')"> <a href="/parfume/new">1. Добавить парфюм</a></li>
         <li ><a href="/parfume">2. Просмотр всего парфюма</a></li>
-        <li sec:authorize="hasRole('ROLE_ADMIN')"><a href="/parfume/search"> 3. Поиск парфюма по типу</a></li>
+        <li sec:authorize="hasRole('ADMIN')"><a href="/parfume/search"> 3. Поиск парфюма по типу</a></li>
         <li><a href="/logout">4. Выход</a></li>
     </ul>
 </body>
