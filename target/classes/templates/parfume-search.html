@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Поиск парфюма</title>
+</head>
+<body>
+    <h1>Магазин парфюмерии</h1>
+    <ul>
+        <li sec:authorize="hasRole('ROLE_ADMIN')"><a href="/parfume/new">1. Добавить парфюм</a></li>
+        <li><a href="/parfume">2. Просмотр всего парфюма</a></li>
+        <li sec:authorize="hasRole('ROLE_ADMIN')"><a href="/parfume/search">3. Поиск парфюма по типу</a></li>
+        <li><a href="/logout">4. Выход</a></li>
+    </ul>
+    <h2>Поиск парфюма</h2>
+
+    <form action="/parfume/search" method="get">
+        <label for="type">Поиск по типу:</label>
+        <input type="text" id="type" name="type">
+        <button type="submit">Искать</button>
+    </form>
+
+    <div th:if="${parfumeList.isEmpty()}">
+        <p>Ничего не найдено.</p>
+    </div>
+
+    <table th:if="${not parfumeList.isEmpty()}">
+        <thead>
+            <tr>
+                <th>Название</th>
+                <th>Тип</th>
+                <th>Описание</th>
+                <th>Вес</th>
+                <th>Цена</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="parfume : ${parfumeList}">
+                <td th:text="${parfume.name}"></td>
+                <td th:text="${parfume.type}"></td>
+                <td th:text="${parfume.description}"></td>
+                <td th:text="${parfume.weight}"></td>
+                <td th:text="${parfume.price}"></td>
+            </tr>
+        </tbody>
+    </table>
+    <a href="/">Закрыть поиск</a>
+</body>
+</html>

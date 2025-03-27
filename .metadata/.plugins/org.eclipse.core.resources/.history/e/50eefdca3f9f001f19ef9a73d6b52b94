@@ -1,0 +1,10 @@
+package ru.example;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import ru.example.Jewelry;
+
+import java.util.List; // Добавьте этот импорт
+
+public interface JewelryRepository extends JpaRepository<Jewelry, Long> {
+    List<Jewelry> findByMaterial(String material);
+}

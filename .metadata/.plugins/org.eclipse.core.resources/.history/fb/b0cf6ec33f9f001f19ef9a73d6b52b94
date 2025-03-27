@@ -1,0 +1,97 @@
+package ru.example;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Scanner;
+
+@Component
+public class ConsoleApp implements CommandLineRunner {
+
+    @Autowired
+    private JewelryRepository jewelryRepository;
+
+    private final Scanner scanner = new Scanner(System.in);
+
+    @Override
+    public void run(String... args) {
+        // Ваш консольный интерфейс здесь
+        while (true) {
+            System.out.println("\n1. Add Jewelry\n2. Show All\n3. Edit by ID\n4. Delete by ID\n5. Search by Material\n6. Exit");
+            int choice = Integer.parseInt(scanner.nextLine());
+            
+            switch (choice) {
+                case 1 -> addJewelry();
+                case 2 -> showAllJewelry();
+                case 3 -> editJewelry();
+                case 4 -> deleteJewelry();
+                case 5 -> searchJewelryByMaterial();
+                case 6 -> System.exit(0);
+                default -> System.out.println("Invalid choice!");
+            }
+        }
+    }
+
+    private void addJewelry() {
+        System.out.print("Enter name: ");
+        String name = scanner.nextLine();
+        System.out.print("Enter material: ");
+        String material = scanner.nextLine();
+        System.out.print("Enter description: ");
+        String description = scanner.nextLine();
+        System.out.print("Enter weight: ");
+        double weight = Double.parseDouble(scanner.nextLine());
+        System.out.print("Enter price: ");
+        double price = Double.parseDouble(scanner.nextLine());
+
+        Jewelry jewelry = new Jewelry(name, material, description, weight, price);
+        jewelryRepository.save(jewelry);
+        System.out.println("Jewelry added: " + jewelry);
+    }
+
+    private void showAllJewelry() {
+        List<Jewelry> jewelries = jewelryRepository.findAll();
+        jewelries.forEach(System.out::println);
+    }
+
+    private void editJewelry() {
+        System.out.print("Enter ID to edit: ");
+        Long id = Long.parseLong(scanner.nextLine());
+
+        Jewelry jewelry = jewelryRepository.findById(id).orElse(null);
+        if (jewelry == null) {
+            System.out.println("Jewelry not found!");
+            return;
+        }
+
+        System.out.print("Enter new name: ");
+        jewelry.setName(scanner.nextLine());
+        System.out.print("Enter new material: ");
+        jewelry.setMaterial(scanner.nextLine());
+        System.out.print("Enter new description: ");
+        jewelry.setDescription(scanner.nextLine());
+        System.out.print("Enter new weight: ");
+        jewelry.setWeight(Double.parseDouble(scanner.nextLine()));
+        System.out.print("Enter new price: ");
+        jewelry.setPrice(Double.parseDouble(scanner.nextLine()));
+
+        jewelryRepository.save(jewelry);
+        System.out.println("Jewelry updated: " + jewelry);
+    }
+
+    private void deleteJewelry() {
+        System.out.print("Enter ID to delete: ");
+        Long id = Long.parseLong(scanner.nextLine());
+        jewelryRepository.deleteById(id);
+        System.out.println("Jewelry deleted with ID: " + id);
+    }
+
+    private void searchJewelryByMaterial() {
+        System.out.print("Enter material to search: ");
+        String material = scanner.nextLine();
+        List<Jewelry> results = jewelryRepository.findByMaterial(material);
+        results.forEach(System.out::println);
+    }
+}

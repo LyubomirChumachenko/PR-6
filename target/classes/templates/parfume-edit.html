@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редактировать парфюм</title>
+</head>
+<body>
+    <h1>Магазин парфюмерии</h1>
+    <ul>
+        <li sec:authorize="hasRole('ROLE_ADMIN')"><a href="/parfume/new">1. Добавить парфюм</a></li>
+        <li><a href="/parfume">2. Просмотр всего парфюма</a></li>
+        <li sec:authorize="hasRole('ROLE_ADMIN')"><a href="/parfume/search">3. Поиск парфюма по типу</a></li>
+        <li><a href="/logout">4. Выход</a></li>
+    </ul>
+    <h2>Редактировать парфюм</h2>
+    <form th:action="@{/parfume/edit/{id}(id=${parfume.id})}" th:object="${parfume}" method="post">
+        <input type="hidden" name="id" th:value="${parfume.id}"/>
+
+        <label for="name">Название:</label>
+        <input type="text" id="name" name="name" th:value="${parfume.name}" required><br>
+
+        <label for="type">Тип:</label>
+        <input type="text" id="type" name="type" th:value="${parfume.type}" required><br>
+
+        <label for="description">Описание:</label>
+        <textarea id="description" name="description" th:text="${parfume.description}"></textarea><br>
+
+        <label for="weight">Вес флакона (г):</label>
+        <input type="number" id="weight" name="weight" th:value="${parfume.weight}" required><br>
+
+        <label for="price">Цена флакона (руб.):</label>
+        <input type="number" id="price" name="price" th:value="${parfume.price}" required><br>
+
+        <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+        <button type="submit">Обновить</button>
+    </form>
+    <a href="/">Закрыть меню редактирования парфюма</a>
+</body>
+</html>
